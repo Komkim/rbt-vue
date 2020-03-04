@@ -8,12 +8,12 @@ export default [
         path: '/news',
         component: NewsIndex,
         exact: true,
-        children: NewsRoutes
+        //children: NewsRoutes
     },
     {
         path: '/author',
         component: AuthorsIndex,
         exact: true,
-        children: AuthorsRoutes
+        //children: AuthorsRoutes
     }
 ]

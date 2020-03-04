@@ -4,7 +4,7 @@
             @close="_onCloseModal"
             width="800px"
     >
-        <template slot="title">Поиск новостей</template>
+        <template slot="title">Фильтр</template>
         <el-form
                 v-model="filters"
                 label-position="top"
@@ -12,84 +12,24 @@
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item
-                            label="Поиск"
-                    >
-                        <el-input
-                                v-model="filters.searchString"
-                                placeholder="Название новости"
-                                width="100%"
-                                clearable
-                        />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item
-                            v-loading="employersLoading"
+                            v-loading="authorsLoading"
                             label="Автор:"
                     >
                         <el-select
                                 multiple
-                                v-model="filters.employers"
-                                placeholder="Укажите исполнителей"
+                                v-model="filters.authors"
+                                placeholder="Укажите автора"
                                 filterable
                                 width="100%"
                         >
                             <el-option
-                                    v-for="employer in employers"
-                                    :key="employer.id"
-                                    :value="employer.id"
-                                    :label="employer.name"
+                                    v-for="author in authors"
+                                    :key="author.id"
+                                    :value="author.id"
+                                    :label="author.name"
                             >
-                                {{ employer.name }}
-                                <!--                <span @click.prevent.stop="_elSelectClick">x</span>-->
+                                {{ author.name }}
                             </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <el-form-item
-                            label="Заявитель"
-                    >
-                        <el-select
-                                v-model="filters.clientId"
-                                filterable
-                                remote
-                                reserve-keyword
-                                :loading="loading"
-                                :remote-method="_onSuggestChange"
-                                width="100%"
-                                placeholder="Введите ФИО"
-                        >
-                            <el-option
-                                    v-for="opt in data"
-                                    :key="opt.id"
-                                    :value="opt.value"
-                                    :label="opt.label"
-                            >
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col
-                        v-loading="statusTypesLoading"
-                        :span="12"
-                >
-                    <el-form-item
-                            label="Статус заявления"
-                    >
-                        <el-select
-                                class="full-width"
-                                v-model="filters.statusType"
-                                placeholder="Статус звявления"
-                        >
-                            <el-option
-                                    v-for="status in statusTypes"
-                                    :key="status.id"
-                                    :value="status.id"
-                                    :label="status.type"
-                            ></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -132,7 +72,7 @@
                             type="danger"
                             @click="_resetFilters"
                     >
-                        Сбросить
+                        Отменить
                     </el-button>
                 </el-row>
             </el-form-item>
@@ -153,50 +93,42 @@
             }
         },
         computed: {
-            ...mapGetters('office/contracts/filters', [
+            ...mapGetters('news/filters', [
                 'filterData'
             ]),
-            ...mapGetters('office/clients/suggest', [
+            ...mapGetters('news/suggest', [
                 'data',
                 'loading'
             ]),
             ...mapGetters({
-                workTypesLoading: 'office/settings/workTypes/loading',
-                workTypes: 'office/settings/workTypes/data',
-                statusTypesLoading: 'office/settings/statusTypes/loading',
-                statusTypes: 'office/settings/statusTypes/data',
-                employersLoading: 'office/employers/table/loading',
-                employers: 'office/employers/table/data'
-                authorLoading: ''
+                authorsLoading: 'authros/loading',
+                authors: 'authors/data'
             })
         },
         data () {
             return {
                 filters: {
-                    employers: [],
-                    clientId: '',
                     searchString: '',
                     dateFrom: '',
                     dateTo: '',
-                    statusType: ''
+                    authors: ''
                 },
                 list: [],
                 suggestOptions: []
             }
         },
         methods: {
-            ...mapMutations('office/contracts/filters', [
+            ...mapMutations('news/filters', [
                 'setFilters',
                 'resetFilters'
             ]),
 
-            ...mapActions('office/contracts/table', [
+            ...mapActions('news/table', [
                 'fetchData'
             ]),
 
             ...mapActions({
-                suggest: 'office/clients/suggest/suggest',
-                fetchEmployers: 'office/employers/table/fetchData'
+                suggest: 'news/suggest'
             }),
 
             _onCloseModal () {
@@ -229,18 +161,8 @@
 
             _onSuggestChange(query) {
                 this.suggest({query})
-            },
-
-            _elSelectClick () {
-                console.log('click')
             }
-        },
-        mounted() {
-            this.filters = {...this.filterData}
-            if (this.employers.length === 0) {
-                this.fetchEmployers()
-            }
-        },
+        }
     }
 </script>
 

@@ -1,4 +1,5 @@
 <template>
+
     <div>
         <div class="news_table__head">
             <el-button
@@ -94,6 +95,7 @@
 
     export default {
         name: 'NewsTable',
+
         components: {
             Filters
         },
@@ -205,10 +207,12 @@
             }
             this.fetchData()
         }
+
+
     }
 </script>
 
-<style lang="scss">
+<style >
     .el-table .warning-row {
         background: oldlace;
     }
