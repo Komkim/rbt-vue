@@ -1,6 +1,7 @@
 <template>
-
     <div>
+        <el-row :gutter="20">
+            <el-col :span="6">
         <div class="news_table__head">
             <el-button
                     type="warning"
@@ -14,23 +15,48 @@
                     @modal-close="_closeFilterModal"
             />
         </div>
+            </el-col>
+            <el-col :span="5" :offset="5">
+
+
+                <el-input
+                        placeholder="Поиск по названию"
+                        v-model="filters.searchString"
+                />
+            </el-col>
+            <el-col :span="5">
+            <el-button
+                    type="warning"
+                    @click="_applyFilters"
+            >
+                Применить
+            </el-button>
+            </el-col>
+        </el-row>
+
         <el-table
                 :data="data"
                 v-loading="loading"
         >
             <el-table-column
                     prop="title"
-                    label="Title"
+                    label="Название"
                     width="150"
                     align="center"
             />
             <el-table-column
-                    prop="authorId"
-                    label="Author"
+                    prop="description"
+                    label="Описание"
+                    width="150"
+                    align="center"
+            />
+            <el-table-column
+                    prop="author.name"
+                    label="Автор"
                     align="center"
             >
                 <template slot-scope="scope">
-                    {{_clientString(scope.row.author_id)}}
+                    {{_authorString(scope.row.author)}}
                 </template>
             </el-table-column>
 
@@ -60,7 +86,6 @@
                             size="small"
                             type="danger"
                             icon="el-icon-delete"
-                            :disabled="!canDelete"
                             circle
                             @click="_onDeleteClick(scope.row.id)"
                     >
@@ -68,13 +93,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div
-                v-if="!loading"
-                class="news_table__pagination-row"
-        >
+        <div class="news_table__pagination-row">
             <el-pagination
                     layout="sizes, prev, pager, next, slot"
-                    :page-sizes="[20,30,40]"
+                    :page-sizes="[10,20,30,40]"
                     :page-size="pageSize"
                     :current-page="page"
                     :total="count"
@@ -108,8 +130,17 @@
                 'pageSize'
             ]),
             ...mapGetters('news/filters', [
-                'filtering'
+                'filtering',
+                'filterData'
             ])
+        },
+        data() {
+            return {
+                filterIsOpen: false,
+                filters: {
+                    searchString: ''
+                }
+            }
         },
         methods: {
             ...mapMutations('news/table', [
@@ -119,25 +150,25 @@
             ...mapMutations('news/filters', [
                 'setFilters'
             ]),
-            ...mapActions('news/table', [
+                ...mapActions('news/table', [
                 'fetchData'
             ]),
             ...mapActions('news/editItem', [
                 'removeData',
             ]),
 
-            dateColumn(data){
+            dateColumn(data) {
+                //colsole.log(data);
                 return moment(data).format("DD-MM-YYYY")
             },
 
 
-            _clientString(data)
-            {
-                return data.client ? data.client.name : 'Не указан';
+            _authorString(data) {
+                return data ? data.name : 'Не указан';
             },
 
             _onEditClick(id) {
-                return this.$router.push({name: 'EditNews', params: {uuid: id}})
+                return this.$router.push({name: 'NewsEdit', params: {uuid: id}})
             },
             _onDeleteClick(id) {
                 return this.$confirm('Удалить выбранный элемент?', {
@@ -148,25 +179,37 @@
                     .then(() => {
                         this.removeData({id: id})
                             .then(res => {
-                                this.$message.success(`Новость удалена.`)
+                                this.$message.success(`Удалено`)
                                 this.fetchData()
                             })
                             .catch(err => {
                                 this.message.error(`Ошибка: ${err.message}`)
                             })
                     })
-                    .catch(()=>{})
+                    .catch(() => {
+                    })
             },
-            _openFilterModal () {
+            _openFilterModal() {
                 this.filterIsOpen = true
             },
 
-            _closeFilterModal () {
+            _closeFilterModal() {
                 this.filterIsOpen = false
             },
+            _applyFilters () {
+                let queryData = {...this.filters}
+                this.setFilters({filterData: queryData})
+                for (let prop in queryData) {
+                    if(queryData[prop] === '') {
+                        delete queryData[prop]
+                    }
+                }
+                this.$router.push({ query: {...this.$route.query, ...queryData}})
+                this.fetchData()
+            },
 
-            _handlePageSizeChange (pageSize) {
-                this.$router.push({ query: {...this.$route.query, limit: pageSize, page: '1'}})
+            _handlePageSizeChange(pageSize) {
+                this.$router.push({query: {...this.$route.query, limit: pageSize, page: '1'}})
                 this.setPageSize({pageSize})
                 this.setPage({page: 1})
                 this.setFilters({filterData: {limit: pageSize}})
@@ -174,7 +217,7 @@
                     .then(() => window.scrollTo({top: 0, behavior: 'smooth'}))
             },
 
-            _handlePageChange (page) {
+            _handlePageChange(page) {
                 this.$router.push({query: {...this.$route.query, page: page}})
                 this.setPage({page})
                 this.setFilters({filterData: {page: page}})
@@ -182,7 +225,7 @@
                     .then(() => window.scrollTo({top: 0, behavior: 'smooth'}))
             },
 
-            _handleNextPageClick () {
+            _handleNextPageClick() {
                 let nextPage = this.page + 1;
                 this.setPage({page: nextPage})
                 this.$router.push({query: {...this.$route.query, page: '' + nextPage}})
@@ -191,7 +234,7 @@
                     .then(() => window.scrollTo({top: 0, behavior: 'smooth'}))
             },
 
-            _handlePrevPageClick () {
+            _handlePrevPageClick() {
                 let prevPage = this.page - 1;
                 this.setPage({page: prevPage})
                 this.$router.push({query: {...this.$route.query, page: '' + prevPage}})
@@ -199,15 +242,11 @@
                 this.fetchData()
                     .then(() => window.scrollTo({top: 0, behavior: 'smooth'}))
             },
+
         },
-        mounted () {
-            if (!this.$route.query.employers) {
-                this.$router.push({query: {...this.$route.query, employers: [this.profile.id]}})
-                this.setFilters({filterData: {employers: [this.profile.id]}})
-            }
+        mounted() {
             this.fetchData()
         }
-
 
     }
 </script>
@@ -229,15 +268,17 @@
     }
 
     .news_table {
-        &__head {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        &__pagination-row {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
     }
+
+    __head {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    __pagination-row {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
 </style>

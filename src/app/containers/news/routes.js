@@ -8,6 +8,11 @@ export default [
         component: NewsTable
     },
     {
+        path: '/news',
+        name: 'NewsTable',
+        component: NewsTable
+    },
+    {
         path: '/news/create',
         name: 'NewsContracts',
         component: NewsEdit

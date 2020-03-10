@@ -20,9 +20,5 @@ export default {
 
     delete ({id}) {
         return axios.delete(`${apiPrefixV1}/news/${id}`)
-    },
-
-    suggest({query}) {
-        return axios.get(`${apiPrefixV1}/news/suggest`, {params: {query}})
     }
 }

@@ -4,7 +4,6 @@ import Axios from 'axios'
 //const BASE_API_PATH = "http://185.224.248.225:8081"
 const BASE_API_PATH = process.env.VUE_APP_API_URL
 const axios = Axios.create({
-    baseURL: BASE_API_PATH
 })
 
 const apiPrefixV1 = `/api`

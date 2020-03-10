@@ -13,7 +13,7 @@ export default {
         data: state => state.data,
         count: state => state.meta ? state.meta.total : 0,
         page: state => state.meta ? state.meta.currentPage : 1,
-        pageSize: state => state.meta ? parseInt(state.meta.perPage) : 20,
+        pageSize: state => state.meta ? parseInt(state.meta.perPage) : 10,
         filterData: (state, getters, rootState, rootGetters) => rootGetters['news/filters/filterData']
     },
     mutations: {
@@ -39,6 +39,7 @@ export default {
     actions: {
         fetchData ({commit, getters}) {
             commit('setLoading', {loading: true})
+                //console.log('call')
             api.news.get({query: getters.filterData})
                 .then(res => {
                     commit('setData', {data: res.data})

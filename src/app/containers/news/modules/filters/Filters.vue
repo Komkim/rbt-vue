@@ -12,25 +12,23 @@
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item
-                            v-loading="authorsLoading"
                             label="Автор:"
                     >
-                        <el-select
-                                multiple
-                                v-model="filters.authors"
-                                placeholder="Укажите автора"
-                                filterable
-                                width="100%"
-                        >
-                            <el-option
-                                    v-for="author in authors"
-                                    :key="author.id"
-                                    :value="author.id"
-                                    :label="author.name"
-                            >
-                                {{ author.name }}
-                            </el-option>
-                        </el-select>
+                        <el-input
+                                placeholder="Поиск по названию"
+                                v-model="filters.authorName"
+                        />
+<!--                        <el-select-->
+<!--                                v-model="filters.authorId"-->
+<!--                                placeholder="Укажите автора"-->
+<!--                                filterable-->
+<!--                                remote-->
+<!--                                reserve-keyword-->
+<!--                                :remote-method="_onSuggestChange"-->
+<!--                                width="100%"-->
+<!--                        >-->
+
+<!--                        </el-select>-->
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -96,14 +94,10 @@
             ...mapGetters('news/filters', [
                 'filterData'
             ]),
-            ...mapGetters('news/suggest', [
+            ...mapGetters('authors/suggest', [
                 'data',
                 'loading'
-            ]),
-            ...mapGetters({
-                authorsLoading: 'authros/loading',
-                authors: 'authors/data'
-            })
+            ])
         },
         data () {
             return {
@@ -111,7 +105,8 @@
                     searchString: '',
                     dateFrom: '',
                     dateTo: '',
-                    authors: ''
+                    authorId: '',
+                    authorName: ''
                 },
                 list: [],
                 suggestOptions: []
@@ -127,9 +122,9 @@
                 'fetchData'
             ]),
 
-            ...mapActions({
-                suggest: 'news/suggest'
-            }),
+            ...mapActions('authors/suggest', [
+                'suggest']
+            ),
 
             _onCloseModal () {
                 this.$emit('modal-close')
@@ -162,6 +157,9 @@
             _onSuggestChange(query) {
                 this.suggest({query})
             }
+        },
+        mounted () {
+            this.filters = {...this.filterData}
         }
     }
 </script>

@@ -3,8 +3,9 @@ import api from '@/api'
 const defaultState = {
     formData: {
         title: '',
-        desctiption: '',
-        text:''
+        description: '',
+        text:'',
+        author_id:''
     },
     loading: false,
     saving: false,

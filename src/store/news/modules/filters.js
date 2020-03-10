@@ -1,6 +1,6 @@
 const defaultState = {
     filterData: {
-        authorId: '',
+        authorsId   : '',
         dateFrom: '',
         dateTo: ''
     },
