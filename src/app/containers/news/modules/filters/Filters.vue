@@ -18,17 +18,6 @@
                                 placeholder="Поиск по названию"
                                 v-model="filters.authorName"
                         />
-<!--                        <el-select-->
-<!--                                v-model="filters.authorId"-->
-<!--                                placeholder="Укажите автора"-->
-<!--                                filterable-->
-<!--                                remote-->
-<!--                                reserve-keyword-->
-<!--                                :remote-method="_onSuggestChange"-->
-<!--                                width="100%"-->
-<!--                        >-->
-
-<!--                        </el-select>-->
                     </el-form-item>
                 </el-col>
             </el-row>

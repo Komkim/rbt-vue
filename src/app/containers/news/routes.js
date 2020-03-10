@@ -1,5 +1,6 @@
 import NewsEdit from './modules/newsEdit/NewsEdit'
 import NewsTable from './modules/newsTable/NewsTable'
+import OneNews from './modules/oneNews/OneNews'
 
 export default [
     {
@@ -19,7 +20,7 @@ export default [
     },
     {
         path: '/news/:uuid',
-        name: 'NewsEdit',
-        component: NewsEdit,
+        name: 'OneNews',
+        component: OneNews,
     }
 ]

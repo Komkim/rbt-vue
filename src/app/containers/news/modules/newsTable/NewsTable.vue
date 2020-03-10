@@ -79,7 +79,7 @@
                             type="primary"
                             icon="el-icon-edit"
                             circle
-                            @click="_onEditClick(scope.row.id)"
+                            @click="_onOneNews(scope.row.id)"
                     >
                     </el-button>
                     <el-button
@@ -162,6 +162,9 @@
                 return moment(data).format("DD-MM-YYYY")
             },
 
+            _onOneNews(id){
+                return this.$router.push({name: 'OneNews', params: {uuid: id}})
+            },
 
             _authorString(data) {
                 return data ? data.name : 'Не указан';
