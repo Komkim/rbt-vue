@@ -39,7 +39,6 @@ export default {
     actions: {
         fetchData ({commit, getters}) {
             commit('setLoading', {loading: true})
-                //console.log('call')
             api.news.get({query: getters.filterData})
                 .then(res => {
                     commit('setData', {data: res.data})

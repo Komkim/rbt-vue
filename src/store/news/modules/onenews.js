@@ -1,7 +1,8 @@
 import api from '@/api'
 const defaultState = {
     loading: false,
-    data: []
+    data: [],
+    meta:{}
 }
 export default {
     namespaced: true,
@@ -27,7 +28,7 @@ export default {
         },
     },
     actions: {
-        fetchData ({commit, state}, {uuid}) {
+        fetchOneData ({commit, state}, {uuid}) {
             commit('setLoading', {loading: true})
             return api.news.one({id: uuid})
                 .then(res => commit('setData', {data: res.data}))

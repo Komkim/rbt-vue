@@ -249,6 +249,7 @@
 
         },
         mounted() {
+            this.setFilters({filterData: this.$route.query})
             this.fetchData()
         },
 

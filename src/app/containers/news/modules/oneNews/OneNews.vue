@@ -36,7 +36,7 @@
                 <span>Статей</span>
             </el-col>
             <el-col :span="3">
-                <div class="grid-content">{{oneNews.author.rating}}</div>
+                <div class="grid-content">{{count}}</div>
             </el-col>
         </el-row>
         <el-row :gutter="20" >
@@ -64,10 +64,14 @@
                     author: {
                         name: '',
                         rating: '',
+                        id : '',
                     },
                     created_at: '',
                     title: '',
                     text: ''
+                },
+                filters:{
+                    authorId:''
                 }
 
             }
@@ -76,17 +80,29 @@
             ...mapGetters('news/onenews', [
                 'data',
                 'loading',
-                'count'
-            ])
+            ]),
+            ...mapGetters('news/filters', [
+                'filterData'
+            ]),
+            ...mapGetters('news/table', [
+                'count',
+            ]),
         },
         methods: {
             ...mapActions('news/onenews', [
-                'fetchData',
+                'fetchOneData',
                 'countNews'
             ]),
             ...mapMutations('news/onenews', [
                 'setData',
                 'setLoading'
+            ]),
+            ...mapMutations('news/filters', [
+                'setFilters',
+                'resetFilters'
+            ]),
+            ...mapActions('news/table', [
+                'fetchData'
             ]),
 
             dateFormat(time){
@@ -95,10 +111,19 @@
             mainPages(){
                 return this.$router.push({name: 'NewsTable'})
             },
-            countnews(id){
-                return this.countNews({uuid:id})
+            _applyFilters ($id) {
+                //this.filters.authorId = $id
+                let storeData = {...this.filters}
+                this.setFilters({filterData: storeData})
+                let queryData = {...storeData}
+                for (let prop in queryData) {
+                    if(queryData[prop] === '') {
+                        delete queryData[prop]
+                    }
+                }
 
-            }
+                this.fetchData()
+            },
         },
         watch: {
             data: function (newData) {
@@ -106,7 +131,8 @@
             }
         },
         mounted() {
-            this.fetchData({uuid: this.$route.params.uuid})
+            this.fetchOneData({uuid: this.$route.params.uuid})
+            this._applyFilters (this.$route.params.uuid)
         }
     }
 

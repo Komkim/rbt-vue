@@ -130,6 +130,7 @@
                         delete queryData[prop]
                     }
                 }
+
                 this.$router.push({ query: {...this.$route.query, ...queryData}})
                 this._onCloseModal()
                 this.fetchData()
