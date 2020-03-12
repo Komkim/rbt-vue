@@ -22,5 +22,10 @@ export default [
         path: '/news/:uuid',
         name: 'OneNews',
         component: OneNews,
+    },
+    {
+        path: '/news/edit/:uuid',
+        name: 'NewsEdit',
+        component: NewsEdit,
     }
 ]

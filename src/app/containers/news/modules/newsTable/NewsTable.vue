@@ -37,6 +37,7 @@
         <el-table
                 :data="data"
                 v-loading="loading"
+                @row-click="_onOneNews"
         >
             <el-table-column
                     prop="title"
@@ -74,14 +75,14 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <el-button
-                            size="small"
-                            type="primary"
-                            icon="el-icon-edit"
-                            circle
-                            @click="_onOneNews(scope.row.id)"
-                    >
-                    </el-button>
+<!--                    <el-button-->
+<!--                            size="small"-->
+<!--                            type="primary"-->
+<!--                            icon="el-icon-edit"-->
+<!--                            circle-->
+<!--                            @click="_onEditClick(scope.row.id)"-->
+<!--                    >-->
+<!--                    </el-button>-->
                     <el-button
                             size="small"
                             type="danger"
@@ -153,7 +154,7 @@
                 ...mapActions('news/table', [
                 'fetchData'
             ]),
-            ...mapActions('news/editItem', [
+            ...mapActions('news/edititem', [
                 'removeData',
             ]),
 
@@ -162,8 +163,8 @@
                 return moment(data).format("DD-MM-YYYY")
             },
 
-            _onOneNews(id){
-                return this.$router.push({name: 'OneNews', params: {uuid: id}})
+            _onOneNews(row){
+                return this.$router.push({name: 'OneNews', params: {uuid: row.id}})
             },
 
             _authorString(data) {
@@ -249,7 +250,7 @@
         },
         mounted() {
             this.fetchData()
-        }
+        },
 
     }
 </script>

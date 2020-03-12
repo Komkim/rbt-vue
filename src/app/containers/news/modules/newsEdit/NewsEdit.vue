@@ -69,7 +69,7 @@
 
     export default {
 
-        name: 'EditForm',
+        name: 'NewsEdit',
         props: {
             formData: {
                 type: Object,
@@ -87,7 +87,7 @@
             }
         },
         methods: {
-            ...mapActions('news/editItem', [
+            ...mapActions('news/edititem', [
                 'updateData'
             ]),
             _onSubmitClick () {
