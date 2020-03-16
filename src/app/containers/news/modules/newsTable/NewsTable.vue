@@ -75,14 +75,6 @@
                     align="center"
             >
                 <template slot-scope="scope">
-<!--                    <el-button-->
-<!--                            size="small"-->
-<!--                            type="primary"-->
-<!--                            icon="el-icon-edit"-->
-<!--                            circle-->
-<!--                            @click="_onEditClick(scope.row.id)"-->
-<!--                    >-->
-<!--                    </el-button>-->
                     <el-button
                             size="small"
                             type="danger"
@@ -131,7 +123,6 @@
                 'pageSize'
             ]),
             ...mapGetters('news/filters', [
-                'filtering',
                 'filterData'
             ])
         },
@@ -159,7 +150,6 @@
             ]),
 
             dateColumn(data) {
-                //colsole.log(data);
                 return moment(data).format("DD-MM-YYYY")
             },
 
@@ -171,9 +161,6 @@
                 return data ? data.name : 'Не указан';
             },
 
-            _onEditClick(id) {
-                return this.$router.push({name: 'NewsEdit', params: {uuid: id}})
-            },
             _onDeleteClick(id) {
                 return this.$confirm('Удалить выбранный элемент?', {
                     confirmButtonText: 'Да',

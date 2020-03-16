@@ -34,16 +34,6 @@ export default {
                 .then(res => commit('setData', {data: res.data}))
                 .catch(err => err)
                 .finally(() => commit('setLoading', {loading: false}))
-        },
-        countNews({commit, state}, {uuid}) {
-            commit('setLoading', {loading: true})
-            return api.news.get({query: getters.filterData})
-                .then(res => {
-                    commit('setData', {data: res.data})
-                    commit('setMeta', {data: res.meta})
-                })
-                .catch(err => err)
-                .finally(() => commit('setLoading', {loading: false}))
-        },
+        }
     }
 }

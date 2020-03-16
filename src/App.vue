@@ -14,11 +14,7 @@
             toggleCollapse () {
                 this.collapse = !this.collapse
             }
-        },
-        // mounted() {
-        //     fetch('/api/news')
-        //         .then(res => console.log(res));
-        // }
+        }
     }
 </script>
 

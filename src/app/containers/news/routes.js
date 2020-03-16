@@ -1,4 +1,3 @@
-import NewsEdit from './modules/newsEdit/NewsEdit'
 import NewsTable from './modules/newsTable/NewsTable'
 import OneNews from './modules/oneNews/OneNews'
 

@@ -83,10 +83,6 @@
             ...mapGetters('news/filters', [
                 'filterData'
             ]),
-            ...mapGetters('authors/suggest', [
-                'data',
-                'loading'
-            ])
         },
         data () {
             return {
@@ -97,8 +93,7 @@
                     authorId: '',
                     authorName: ''
                 },
-                list: [],
-                suggestOptions: []
+                list: []
             }
         },
         methods: {
@@ -110,10 +105,6 @@
             ...mapActions('news/table', [
                 'fetchData'
             ]),
-
-            ...mapActions('authors/suggest', [
-                'suggest']
-            ),
 
             _onCloseModal () {
                 this.$emit('modal-close')
@@ -143,10 +134,6 @@
                 this._onCloseModal()
                 this.fetchData()
             },
-
-            _onSuggestChange(query) {
-                this.suggest({query})
-            }
         },
         mounted () {
             this.filters = {...this.filterData}
