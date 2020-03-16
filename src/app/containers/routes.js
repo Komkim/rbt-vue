@@ -5,7 +5,7 @@ import AuthorsIndex from '@/app/containers/authors/AuthorsIndex'
 
 export default [
     {
-        path: '/news',
+        path: '/',
         component: NewsIndex,
         exact: true,
         children: NewsRoutes

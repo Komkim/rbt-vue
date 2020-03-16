@@ -5,18 +5,18 @@
                 <span>Название</span>
             </el-col>
             <el-col :span="3">
-                <div class="grid-content">{{oneNews.title}}</div>
+                <div class="grid-content">{{data.title}}</div>
             </el-col>
             <el-col :span="3" :offset="4">
                 <span>Дата создания</span>
             </el-col>
             <el-col :span="3">
-                <div class="grid-content">{{dateFormat(oneNews.created_at)}}</div>
+                <div class="grid-content">{{dateFormat(data.created_at)}}</div>
             </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="20">
-                <div class="grid-content">{{oneNews.text}}</div>
+                <div class="grid-content">{{data.text}}</div>
             </el-col>
         </el-row>
         <el-row :gutter="20" >
@@ -68,7 +68,8 @@
                     },
                     created_at: '',
                     title: '',
-                    text: ''
+                    text: '',
+                    author_id: ''
                 },
                 filters:{
                     authorId:''
@@ -80,6 +81,7 @@
             ...mapGetters('news/onenews', [
                 'data',
                 'loading',
+                //'count'
             ]),
             ...mapGetters('news/filters', [
                 'filterData'
@@ -111,16 +113,23 @@
             mainPages(){
                 return this.$router.push({name: 'NewsTable'})
             },
-            _applyFilters ($id) {
-                //this.filters.authorId = $id
-                let storeData = {...this.filters}
-                this.setFilters({filterData: storeData})
-                let queryData = {...storeData}
-                for (let prop in queryData) {
-                    if(queryData[prop] === '') {
-                        delete queryData[prop]
-                    }
-                }
+            _applyFilters () {
+                //console.log(oneNews)
+                //this.filters.authorId = oneNews.author.id
+                //console.log(...this.oneNews)
+
+                //let storeData = {...this.data.author_id}
+                //this.setFilters({filterData: storeData})
+
+                console.log(this.data)
+                this.setFilters({filterData:{ ...this.data.author_id}})
+
+                //let queryData = {...storeData}
+                // for (let prop in queryData) {
+                //     if(queryData[prop] === '') {
+                //         delete queryData[prop]
+                //     }
+                // }
 
                 this.fetchData()
             },
@@ -132,7 +141,7 @@
         },
         mounted() {
             this.fetchOneData({uuid: this.$route.params.uuid})
-            this._applyFilters (this.$route.params.uuid)
+            this._applyFilters ()
         }
     }
 
